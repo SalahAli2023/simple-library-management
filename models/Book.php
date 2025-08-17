@@ -61,7 +61,17 @@ class Book {
         return $stmt->rowCount();
     }
 
-    
+    //Delete book from database
+    public function delete($id) {
+        $query = "DELETE FROM books WHERE id = :id";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([':id' => $id]);
+        
+        $this->logAction('Book deleted', "ID: $id");
+        
+        return $stmt->rowCount();
+    }
+
     
     
 }
