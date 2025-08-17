@@ -72,6 +72,18 @@ class Book {
         return $stmt->rowCount();
     }
 
+    public function findById($id) {
+        $query = "SELECT * FROM books WHERE id = :id";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([':id' => $id]);
+        
+        return $stmt->fetch();
+    }
+    
+    public function searchBooks($searchTerm) {
+        return $this->search('books', ['title', 'author'], $searchTerm);
+    }
+    
     
     
 }
