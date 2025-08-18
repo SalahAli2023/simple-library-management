@@ -1,5 +1,5 @@
 <?php
-require_once '../models/User.php';
+require_once __DIR__.'/../models/User.php';
 
 class UserController {
     private $userModel;
@@ -9,7 +9,7 @@ class UserController {
     }
     
     public function index() {
-        $users = $this->userModel->getAll();
+        $users = $this->userModel->getAllUser();
         require '../views/users/index.php';
     }
     
