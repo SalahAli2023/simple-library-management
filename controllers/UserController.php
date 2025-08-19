@@ -10,23 +10,49 @@ class UserController {
     
     public function index() {
         $users = $this->userModel->getAllUser();
-        require '../views/users/index.php';
+        require __DIR__.'/../views/users/index.php';
     }
     
     public function create() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = [
-                'name' => $_POST['name'],
-                'email' => $_POST['email'],
-                'phone' => $_POST['phone']
+                'name' => trim($_POST['name']),
+                'email' => filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL),
+                'phone' => preg_replace('/[^0-9]/', '', $_POST['phone']),
+                'password' => password_hash($_POST['password'], PASSWORD_DEFAULT)
             ];
             
-            $this->userModel->create($data);
-            header('Location: index.php?action=users');
-            exit;
+            try{
+                $this->userModel->create($data);
+
+                if ($userModel) {
+                    // Preparing a success message
+                    $_SESSION['flash_message'] = [
+                        'type' => 'success',
+                        'text' => 'User is created successfully!'
+                    ];
+                }
+                header('Location: index.php?action=users');
+                exit;
+            }
+            
+            catch (PDOException $e) {
+                error_log('User creation failed: ' . $e->getMessage());
+                $_SESSION['flash_message'] = [
+                    'type' => 'danger',
+                    'text' => 'User created is Failed : ' . $e->getMessage()
+                ];
+                
+                //Refill the form
+                $_SESSION['old_input'] = $_POST;
+                
+                // Redirecting to the previous page
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit();
+                
+            }
         }
-        
-        require '../views/users/create.php';
+        require  __DIR__.'/../views/users/create.php';
     }
     
     public function edit($id) {
@@ -36,14 +62,44 @@ class UserController {
                 'email' => $_POST['email'],
                 'phone' => $_POST['phone']
             ];
-            
-            $this->userModel->update($id, $data);
-            header('Location: index.php?action=users');
-            exit;
+            if (!empty($_POST['password'])) {
+                $data['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
+            }
+
+            try{
+                $this->userModel->update($id, $data);
+                if ($$user > 0 ) {
+                    $_SESSION['flash_message'] = [
+                        'type' => 'success',
+                        'text' => 'User Details are updated successfully!'
+                    ];
+                }
+                else {
+                    $_SESSION['flash_message'] = [
+                        'type' => 'warning',
+                        'text' =>'User Details are not updated'
+                    ];
+                }
+
+                header('Location: index.php?action=users');
+                exit;
+
+            }catch (PDOException $e) {
+                error_log('User update failed: ' . $e->getMessage());
+                
+                $_SESSION['flash_message'] = [
+                    'type' => 'danger',
+                    'text' => 'User update failed' . $e->getMessage()
+                ];
+                
+                $_SESSION['old_input'] = $_POST;
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                exit();
+            }
         }
         
         $user = $this->userModel->findById($id);
-        require '../views/users/edit.php';
+        require __DIR__.'/../views/users/edit.php';
     }
     
     public function delete($id) {
@@ -53,13 +109,15 @@ class UserController {
     }
     
     public function search() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $searchTerm = $_POST['search_term'];
-            $users = $this->userModel->searchUsers($searchTerm);
-            require '../views/users/search.php';
-            exit;
+        $query = $_GET['query'] ?? '';
+        if ($_SERVER['REQUEST_METHOD'] === 'Post') 
+            {
+                $searchTerm = $_POST['query'];
+                $users = $this->userModel->searchUsers($searchTerm);
+                require __DIR__.'/../views/users/search.php';
+                exit;
         }
         
-        require '../views/users/search.php';
+        require __DIR__.'/../views/users/search.php';
     }
 }
