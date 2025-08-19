@@ -46,7 +46,7 @@ class BookController {
         }
         
         $book = $this->bookModel->findById($id);
-        require '../views/books/edit.php';
+        require __DIR__.'/../views/books/edit.php';
     }
     
     public function delete($id) {

@@ -1,8 +1,8 @@
 <?php
-require_once 'Traits/LoggingTrait.php';
-require_once 'Traits/SearchableTrait.php';
-require_once 'Notification/NotificationInterface.php';
-require_once 'Notification/EmailNotification.php';
+require_once __DIR__.'/../Traits/LoggingTrait.php';
+require_once __DIR__.'/../Traits/SearchableTrait.php';
+require_once __DIR__.'/../Notification/NotificationInterface.php';
+require_once __DIR__.'/../Notification/EmailNotification.php';
 
 class Book {
     use LoggingTrait, SearchableTrait;
@@ -154,7 +154,4 @@ class Book {
         
         return 0;
     }
-    
-    
-    
 }

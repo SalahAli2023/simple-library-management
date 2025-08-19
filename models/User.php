@@ -1,6 +1,6 @@
 <?php
-require_once 'Traits/LoggingTrait.php';
-require_once 'Traits/SearchableTrait.php';
+require_once __DIR__.'/../Traits/LoggingTrait.php';
+require_once __DIR__.'/../Traits/SearchableTrait.php';
 
 class User {
     use LoggingTrait, SearchableTrait;
@@ -12,7 +12,7 @@ class User {
     }
     
     // Get all User from DB
-    public function getAllUsers() {
+    public function getAllUser() {
         $stmt = $this->db->query("SELECT * FROM users");
         return $stmt->fetchAll();
     }
