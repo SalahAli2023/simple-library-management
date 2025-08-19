@@ -1,13 +1,13 @@
 <?php
 $pageTitle = "Search Users";
-require_once __DIR__.'/../layout/header.php';
+require_once __DIR__ .'/../layout/header.php';
 ?>
 
 <div class="container">
     <h1 class="my-4">Search Results</h1>
     
     <!-- Search Form -->
-    <form method="get" action="index.php?action=users&method=search" class="mb-4">
+    <form method="GET" action="index.php?action=users&method=create" class="mb-4">
         <input type="hidden" name="action" value="users">
         <input type="hidden" name="method" value="search">
         
@@ -65,4 +65,4 @@ require_once __DIR__.'/../layout/header.php';
     <?php endif; ?>
 </div>
 
-<?php require_once __DIR__.'/../layout/footer.php'; ?>
+<?php require_once __DIR__ .'/../layout/footer.php'; ?>

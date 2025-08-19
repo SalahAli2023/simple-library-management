@@ -17,7 +17,7 @@
                 <hr>
                 <div class="card-body">
 
-                    <form method="get" action="index.php" class="mb-4">
+                    <form method="Get" action="index.php?action=users&method=search" class="mb-4">
                         <input type="hidden" name="action" value="users">
                         <input type="hidden" name="method" value="search">
                         <div class="input-group">
@@ -62,7 +62,7 @@
                                     <td><?= htmlspecialchars($user['phone']) ?></td>
                                     <td>
                                         <a href="index.php?action=users&method=edit&id=<?= $user['id'] ?>" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i>Edit</a>
-                                        <a href="index.php?action=books&method=delete&id=<?php echo $user['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+                                        <a href="index.php?action=users&method=delete&id=<?php echo $user['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
